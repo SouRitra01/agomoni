@@ -11,7 +11,8 @@ GitHub account for everything: SouRitra01 (do not ask again). Footer credits @So
 - Data: data/*.csv (44 Kolkata + 10 Bengaluru pandals, metro stations, Kolkata food). `python3 scripts/build_data.py` -> public/data/data.json (validates).
 - Engine (public/js/engine.js): multimodal travel model, Held-Karp exact TSP (<=11 stops, verified vs brute force 20/20), 2-opt/relocate on crowd-aware timeline; Pujo Match cosine recommender with "why".
 - Live crowd API (functions/api/crowd.js, event.js) — tested locally with scripts/dev-server.mjs (Node 22+).
-- Redesign "Mahalaya dawn": indigo sky hero, falling shiuli canvas, Galada + Anek Bangla fonts, light/dark themes, schematic metro map fallback.
+- Redesign "Mahalaya dawn": falling shiuli canvas, Galada + Anek Bangla fonts, light/dark themes, schematic metro map fallback.
+- 2026-09-24 visual refresh: sindoor-red/gold/cream theme (was indigo), full-bleed Durga photo hero, photos on every pandal card, "moments" strip, delivery-app style food cards, "food nearby" on each pandal card + "near which mandap?" picker on the food page. Photos: Wikimedia Commons via `scripts/fetch_photos.ps1` (credits auto-listed on the Method page). Local preview without Node/Python: `scripts/serve.ps1`.
 - Preview (private): https://claude.ai/artifact/D2zehpDSzjMAWhKU3mCF29 — built with `python3 scripts/build_preview.py`.
 
 ## Open tasks (in order)
@@ -19,7 +20,8 @@ GitHub account for everything: SouRitra01 (do not ask again). Footer credits @So
 2. Deploy on Cloudflare Pages (README section 1): output dir `public`, D1 `agomoni-db` bound as `DB`, secret `HASH_SALT`.
 3. Verify every pandal lat/lng on Google Maps (all rows are `verified = no`) — most important before promoting.
 4. Add 2026 themes (theme_2026_bn/en) as clubs announce them around Mahalaya (10 Oct).
-5. Later/optional: Bengaluru food list; AI chatbot (only after launch, if traffic).
+5. Android app on Google Play: plan in `docs/ANDROID_PLAN.md` (TWA via Bubblewrap). Start the Play developer account + 14-day closed test early — see timeline there.
+6. Later/optional: Bengaluru food list (+ dish photos); retry `bonedi-1/2` photos (Commons refused them — rerun fetch_photos.ps1); AI chatbot (only after launch, if traffic).
 
 ## Caveats
 - Shashthi/Saptami dates differ by a day between panjikas; config uses 16/17 Oct with a note.

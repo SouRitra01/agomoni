@@ -15,7 +15,7 @@
     zone: "all", type: "all", q: "", sort: "name",
     live: {}, liveOk: true, pos: null, plan: null,
     data: { pandals: [], metro: [], food: [] },
-    match: {},
+    match: {}, foodNear: "",
   };
 
   /* ---------- i18n helpers ---------- */
@@ -72,6 +72,44 @@
     return `<span>${t("metro_near")}: <b>${esc(nm(st.station))}</b> · ${num(walkMin)} ${t("min")} ${t("walk")}</span>`;
   }
 
+  /* ---------- photos ---------- */
+  // Pandals with their own photo use it (key "p-<id>"); the rest get a representative
+  // photo of the same kind of puja, spread round-robin so neighbouring cards differ.
+  const PH = Object.fromEntries((window.PHOTOS || []).map((p) => [p.key, p]));
+  const poolKeys = (pre) => Object.keys(PH).filter((k) => pre.some((x) => k.startsWith(x + "-")));
+  let photoMap = null;
+  function photoFor(p) {
+    if (PH["p-" + p.id]) return { ...PH["p-" + p.id], own: true };
+    if (!photoMap) {
+      photoMap = {}; const seen = {};
+      for (const q of S.data.pandals) {
+        if (PH["p-" + q.id]) continue;
+        let pre = q.city === "bengaluru" ? ["blr", "sabeki"] : [q.type];
+        if (!poolKeys(pre).length) pre = ["theme"];
+        const pool = poolKeys(pre), key = pre.join();
+        seen[key] = (seen[key] ?? -1) + 1;
+        if (pool.length) photoMap[q.id] = PH[pool[seen[key] % pool.length]];
+      }
+    }
+    return photoMap[p.id] || null;
+  }
+  function photoHTML(p) {
+    const ph = photoFor(p); if (!ph) return "";
+    return `<figure class="pphoto"><img src="${ph.src}" alt="${esc(nm(p))}" loading="lazy" decoding="async">${ph.own ? "" : `<figcaption>${t("photo_rep")}</figcaption>`}</figure>`;
+  }
+  function renderMoments() {
+    $("#moments").innerHTML = [["m-kumartuli", "mo_kumartuli"], ["m-dhunuchi", "mo_dhunuchi"], ["m-lights", "mo_lights"], ["m-sindoor", "mo_sindoor"]]
+      .filter(([k]) => PH[k])
+      .map(([k, l]) => `<figure class="moment"><img src="${PH[k].src}" alt="${esc(t(l))}" loading="lazy" decoding="async"><figcaption>${t(l)}</figcaption></figure>`).join("");
+  }
+  function creditsHTML() {
+    const bySrc = new Map((window.PHOTOS || []).map((p) => [p.source, p]));
+    if (!bySrc.size) return "";
+    const title = (u) => decodeURIComponent(u.split("File:")[1] || u).replace(/_/g, " ").replace(/\.(jpe?g|png)$/i, "");
+    return `<h3>${t("photo_credits")}</h3><p class="fine">${t("photo_credits_note")}</p><ul class="credits">${[...bySrc.values()].map((p) =>
+      `<li><a href="${esc(p.source)}" target="_blank" rel="noopener">${esc(title(p.source))}</a> — ${esc(p.author)} · ${esc(p.license)}</li>`).join("")}</ul>`;
+  }
+
   /* ---------- static text ---------- */
   function applyStatic() {
     document.documentElement.lang = S.lang;
@@ -82,6 +120,7 @@
     $("#heroCity").textContent = t("city_" + S.city); $("#heroYear").textContent = num(2026);
     $("#legend").innerHTML = ["theme", "sabeki", "bonedi", "heritage"].map((x) => `<span class="tag t-${x}">${t("t_" + x)}</span>`).join("");
     const gh = $("#ghLink"); gh.href = SITE.github; gh.textContent = "@" + SITE.githubHandle;
+    renderMoments();
     document.title = `${S.lang === "bn" ? SITE.name_bn : SITE.name_en} — ${t("brandSub")} · ${t("city_" + S.city)} ${num(2026)}`;
   }
 
@@ -146,16 +185,33 @@
     $("#zoneChips").innerHTML = zones.map((z) => `<button class="chip" data-zone="${z}" aria-pressed="${S.zone === z}">${z === "all" ? t("all") : t("z_" + z)}</button>`).join("");
     $("#typeChips").innerHTML = types.map((x) => `<button class="chip" data-type="${x}" aria-pressed="${S.type === x}">${x === "all" ? t("all") : t("t_" + x)}</button>`).join("");
   }
+  /* ---------- food near pandals ---------- */
+  const cityName = (c = S.city) => (c === "kolkata" ? "Kolkata" : "Bengaluru");
+  const distTxt = (km) => km < 1 ? `${num(Math.max(50, Math.round(km * 1000 / 50) * 50))} ${S.lang === "bn" ? "মিটার" : "m"}` : `${num(km.toFixed(1))} ${S.lang === "bn" ? "কিমি" : "km"}`;
+  const gmPlace = (f) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${f.name_en}, ${f.area_en}, ${cityName(f.city)}`)}`;
+  // Live Google Maps search covers every pandal, including cities with no curated list.
+  const gmNearby = (p) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`restaurants near ${p.name_en}, ${p.area_en}, ${cityName(p.city)}`)}`;
+  const foodNear = (p, maxKm = 2.5) => S.data.food.filter((f) => f.city === p.city)
+    .map((f) => ({ f, km: Engine.haversine(p, f) })).filter((x) => x.km <= maxKm).sort((a, b) => a.km - b.km);
+  function foodNearHTML(p) {
+    const near = foodNear(p).slice(0, 2);
+    const stall = p.food >= 0.8 ? `<span class="badge stall">${t("stall_big")}</span>` : "";
+    return `<div class="fnear"><b>${t("food_nearby")}</b>${stall}
+      ${near.map(({ f, km }) => `<span><a href="#food" data-foodnear="${p.id}">${esc(nm(f))}</a> — ${esc(nm(f, "try"))} · ${distTxt(km)}</span>`).join("")}
+      <a class="fmore" target="_blank" rel="noopener" href="${gmNearby(p)}">${t("more_restaurants")} ↗</a></div>`;
+  }
+
   function pandalCard(p) {
     const inR = routeIds().includes(p.id);
     const theme = nm(p, "theme_2026") || t("theme_tba");
-    return `<article class="pcard" id="p-${p.id}">
+    return `<article class="pcard" id="p-${p.id}">${photoHTML(p)}
       <div class="meta"><span class="tag t-${p.type}">${t("t_" + p.type)}</span><span>${esc(nm(p, "area"))}</span>${p.since ? `<span>${t("since")} ${num(p.since)}</span>` : ""}</div>
       <h3>${esc(nm(p))}</h3>${S.lang === "bn" ? `<div class="en">${esc(p.name_en)}</div>` : ""}
       <p class="note">${esc(nm(p, "note"))}</p>
       <div class="theme26"><b>${t("theme26")}:</b> ${esc(theme)}</div>
       <div class="meta">${crowdHTML(p)}</div>
       <div class="meta">${metroHTML(p)}</div>
+      ${foodNearHTML(p)}
       <div class="actions">
         <button class="btn small ${inR ? "ghost" : "primary"}" data-add="${p.id}">${inR ? t("in_route") : t("add_route")}</button>
         <button class="btn small ghost" data-map="${p.id}">${t("show_map")}</button>
@@ -178,7 +234,7 @@
 
   /* ---------- map ---------- */
   let map = null, markerLayer = null, routeLayer = null;
-  const typeColor = { theme: "#B3261E", sabeki: "#B8862B", bonedi: "#2F5D8A", heritage: "#3F7A4A" };
+  const typeColor = { theme: "#B3261E", sabeki: "#B8862B", bonedi: "#7A3E9D", heritage: "#3F7A4A" };
   function ensureMap() {
     if (map) return true;
     if (typeof L === "undefined") { $("#map").innerHTML = `<div class="map-fallback">Map library failed to load — check your connection.</div>`; return false; }
@@ -345,7 +401,7 @@
     if (Q.some(([q]) => !S.match[q])) { box.innerHTML = ""; return; }
     const res = Engine.recommend(S.match, cityPandals(), 6);
     box.innerHTML = `<div class="row-btns" style="margin-top:20px"><button class="btn primary" id="addAll" data-ids="${res.map((r) => r.pandal.id).join(",")}">${t("match_add_all")}</button></div>
-      <div class="grid">${res.map((r) => `<article class="pcard">
+      <div class="grid">${res.map((r) => `<article class="pcard">${photoHTML(r.pandal)}
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h3>${esc(nm(r.pandal))}</h3><span class="score">${num(r.score)}%</span></div>
         <div class="bar"><i style="width:${r.score}%"></i></div>
         <p class="why"><span class="tag t-${r.pandal.type}">${t("t_" + r.pandal.type)}</span> · ${esc(nm(r.pandal, "area"))}<br>${t("why")}: ${r.why.map((d) => t("dim_" + d)).join(" + ")}</p>
@@ -358,22 +414,43 @@
   /* ---------- food ---------- */
   function renderFood() {
     const box = $("#foodList");
-    const food = S.data.food.filter((f) => f.city === S.city);
-    const gm = (f) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(f.name_en + ", " + f.area_en + ", " + (S.city === "kolkata" ? "Kolkata" : "Bengaluru"))}`;
-    let html = food.map((f) => `<article class="pcard">
-      <div class="meta"><span class="tag t-theme">${esc(nm(f, "kind"))}</span><span>${esc(nm(f, "area"))}</span></div>
-      <h3>${esc(nm(f))}</h3>
-      <p class="note"><b>${t("food_try")}:</b> ${esc(nm(f, "try"))}</p>
-      <div class="actions"><a class="btn small ghost" target="_blank" rel="noopener" href="${gm(f)}">${t("open_gmaps")}</a></div>
-    </article>`).join("");
+    // "Near which mandap?" picker: sorts places by distance from the chosen pandal.
+    const sel = $("#foodNear"), pandals = cityPandals().slice().sort((a, b) => nm(a).localeCompare(nm(b)));
+    if (S.foodNear && byId(S.foodNear)?.city !== S.city) S.foodNear = "";
+    sel.innerHTML = `<option value="">${t("food_near_any")}</option>` + pandals.map((p) => `<option value="${p.id}"${p.id === S.foodNear ? " selected" : ""}>${esc(nm(p))}</option>`).join("");
+    const from = S.foodNear ? byId(S.foodNear) : null;
+    let food = S.data.food.filter((f) => f.city === S.city);
+    if (from) food = food.map((f) => ({ f, km: Engine.haversine(from, f) })).sort((a, b) => a.km - b.km).map((x) => x.f);
+    // Otherwise show each place's nearest pandal — useful on a pandal-hopping night.
+    const nearest = (f) => cityPandals().map((p) => ({ p, km: Engine.haversine(f, p) })).sort((a, b) => a.km - b.km)[0];
+    let html = from ? `<article class="pcard fcourts fnearby"><h3>${t("food_near_title").replace("{p}", esc(nm(from)))}</h3>
+      <p class="note">${from.food >= 0.8 ? t("stall_big_note") : t("stall_note")}</p>
+      <div class="actions"><a class="btn small primary" target="_blank" rel="noopener" href="${gmNearby(from)}">${t("more_restaurants")} ↗</a></div></article>` : "";
+    html += food.map((f) => {
+      const own = PH["fp-" + f.id], ph = own || PH["f-" + f.id], n = nearest(f);
+      const where = from ? `<span>${t("from_pandal")}: ${distTxt(Engine.haversine(from, f))}</span>`
+        : n ? `<span>${t("near_pandal")}: <a href="#pandals" data-jump="${n.p.id}">${esc(nm(n.p))}</a> · ${distTxt(n.km)}</span>` : "";
+      return `<article class="fcard">
+        <a class="fimg" target="_blank" rel="noopener" href="${gmPlace(f)}" aria-label="${esc(nm(f))} — ${t("open_gmaps")}">
+          ${ph ? `<img src="${ph.src}" alt="${esc(nm(f, "try"))}" loading="lazy" decoding="async">` : ""}
+          <span class="fkind">${esc(nm(f, "kind"))}</span>
+          <span class="ftry"><small>${t("food_try")}</small>${esc(nm(f, "try"))}</span>
+          ${ph && !own ? `<span class="fnote">${t("dish_photo")}</span>` : ""}
+        </a>
+        <div class="fbody">
+          <h3>${esc(nm(f))}</h3>
+          <div class="fmeta"><span>${esc(nm(f, "area"))}</span>${where}</div>
+        </div>
+      </article>`;
+    }).join("");
     const courts = cityPandals().filter((p) => p.food >= 0.8);
-    if (courts.length) html += `<article class="pcard" style="grid-column:1/-1"><h3>${t("food_courts")}</h3><p class="note">${S.city === "bengaluru" ? t("food_courts_note") : ""}</p><div class="meta">${courts.map((p) => `<a href="#pandals" data-jump="${p.id}">${esc(nm(p))}</a>`).join(" · ")}</div></article>`;
+    if (courts.length && !from) html += `<article class="pcard fcourts"><h3>${t("food_courts")}</h3><p class="note">${S.city === "bengaluru" ? t("food_courts_note") : ""}</p><div class="meta">${courts.map((p) => `<a href="#pandals" data-jump="${p.id}">${esc(nm(p))}</a>`).join(" · ")}</div></article>`;
     box.innerHTML = html;
   }
 
   /* ---------- about ---------- */
   const ABOUT = {
-    bn: `<p>আগমনী একটি ছোট ডেটা প্রোডাক্ট। ঝলমলে ছবির বদলে এর মূল কাজ তিনটি সমস্যার সমাধান: <b>কোন ক্রমে ঘুরলে সবচেয়ে কম সময় লাগবে</b>, <b>কোন মণ্ডপ আমার রুচির সঙ্গে মেলে</b>, আর <b>এখন কোথায় ভিড় কম</b>।</p>
+    bn: `<p>আগমনী একটি ছোট ডেটা প্রোডাক্ট। ছবির পাশাপাশি এর মূল কাজ তিনটি সমস্যার সমাধান: <b>কোন ক্রমে ঘুরলে সবচেয়ে কম সময় লাগবে</b>, <b>কোন মণ্ডপ আমার রুচির সঙ্গে মেলে</b>, আর <b>এখন কোথায় ভিড় কম</b>।</p>
       <h3>১. স্মার্ট রুট — যাতায়াতের মডেল</h3>
       <p>প্রতিটি দুই মণ্ডপের মধ্যে তিনটি বিকল্প হিসেব হয় — হাঁটা (≤১.৮ কিমি), মেট্রো (নিকটতম স্টেশনে হেঁটে যাওয়া + অপেক্ষা + যাত্রা + লাইন বদল) এবং ক্যাব (পুজোর ট্র্যাফিকে ধীর গতি)। যেটা দ্রুততম, সেটাই বেছে নেওয়া হয়। সোজা দূরত্বকে রাস্তার দূরত্বে রূপান্তর করতে একটি ডিটুর ফ্যাক্টর (কলকাতা ×১.৩) ব্যবহার হয়।</p>
       <h3>২. সেরা ক্রম — Held–Karp + লোকাল সার্চ</h3>
@@ -384,7 +461,7 @@
       <p>দর্শনার্থীরা মণ্ডপে দাঁড়িয়ে ১–৪ স্কেলে ভিড় জানান। গত ৯০ মিনিটের রিপোর্টের সময়-ভারযুক্ত গড় দেখানো হয়, আর রুট প্ল্যানার সেটাই ব্যবহার করে। কোনও ব্যক্তিগত তথ্য বা অবস্থান সংরক্ষণ হয় না; একই ডিভাইস থেকে ১০ মিনিটে একবারই রিপোর্ট করা যায়।</p>
       <h3>সততার কথা</h3>
       <p>এ বছর ভিড়ের কোনও "ভবিষ্যদ্বাণী" দেখানো হয় না — কারণ আগের বছরের ডেটা নেই। এ বছরের রিপোর্ট দিয়ে পরের বছর আসল ফোরকাস্ট মডেল তৈরি হবে। মণ্ডপের অবস্থান আনুমানিক; ভুল পেলে জানান।</p>`,
-    en: `<p>Agomoni is a small data product. Instead of glossy photos, it solves three problems: <b>which order takes the least time</b>, <b>which pandals match my taste</b>, and <b>where is it less crowded right now</b>.</p>
+    en: `<p>Agomoni is a small data product. Beyond the photos, it solves three problems: <b>which order takes the least time</b>, <b>which pandals match my taste</b>, and <b>where is it less crowded right now</b>.</p>
       <h3>1. Smart route — the travel model</h3>
       <p>Between every pair of pandals, three options are costed: walking (≤1.8 km), metro (walk to nearest station + wait + ride + line change) and cab (slow festival traffic). The fastest wins. Straight-line distance is converted to road distance with a detour factor (Kolkata ×1.3).</p>
       <h3>2. Best order — Held–Karp + local search</h3>
@@ -451,7 +528,7 @@
     if (v === "route") renderRoute();
     if (v === "match") renderMatch();
     if (v === "food") renderFood();
-    if (v === "about") $("#aboutBody").innerHTML = ABOUT[S.lang];
+    if (v === "about") $("#aboutBody").innerHTML = ABOUT[S.lang] + creditsHTML();
     if (!focus) window.scrollTo(0, 0);
   }
   function readShared() {
@@ -477,15 +554,17 @@
       const f = new FormData(e.target); Q.forEach(([q]) => (S.match[q] = f.get(q) || S.match[q]));
       renderMatchResult(); if (!Q.some(([q]) => !S.match[q])) { track("match", S.match); $("#matchResult").scrollIntoView({ behavior: "smooth" }); }
     };
+    $("#foodNear").onchange = (e) => { S.foodNear = e.target.value; renderFood(); };
     $("#matchForm").onchange = (e) => { if (e.target.name) S.match[e.target.name] = e.target.value; };
     document.addEventListener("click", (e) => {
-      const el = e.target.closest("[data-add],[data-map],[data-report],[data-del],[data-jump],[data-popadd],[data-level],[data-pin],[data-zoom],#optBtn,#clearBtn,#copyBtn,#addAll,[data-zone],[data-type]");
+      const el = e.target.closest("[data-add],[data-map],[data-report],[data-del],[data-jump],[data-foodnear],[data-popadd],[data-level],[data-pin],[data-zoom],#optBtn,#clearBtn,#copyBtn,#addAll,[data-zone],[data-type]");
       if (!el) return;
       const d = el.dataset;
       if (d.add) { toggleRoute(d.add); const inR = routeIds().includes(d.add); el.textContent = inR ? t("in_route") : t("add_route"); el.classList.toggle("primary", !inR); el.classList.toggle("ghost", inR); toast(inR ? "✓ " + nm(byId(d.add)) : t("remove")); }
       else if (d.map) { location.hash = "map"; setTimeout(() => renderMap(d.map), 30); }
       else if (d.report) openReport(d.report);
       else if (d.del) { toggleRoute(d.del); renderRoute(); }
+      else if (d.foodnear) { e.preventDefault(); S.foodNear = d.foodnear; if (location.hash === "#food") renderFood(); else location.hash = "food"; }
       else if (d.jump) { e.preventDefault(); location.hash = "pandals"; setTimeout(() => show(d.jump), 30); }
       else if (d.popadd) { e.preventDefault(); toggleRoute(d.popadd); map.closePopup(); toast("✓ " + nm(byId(d.popadd))); }
       else if (d.level) sendReport(Number(d.level));

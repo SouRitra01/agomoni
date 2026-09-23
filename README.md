@@ -45,12 +45,22 @@ The CSVs in `data/` are the source of truth.
 ```
 node scripts/dev-server.mjs      # Node 22+, serves the site + real API with in-memory SQLite
 # open http://localhost:8788
+# No Node? On Windows, preview the static site (without the live API) with:
+#   powershell -ExecutionPolicy Bypass -File scripts/serve.ps1
 ```
 
 ## 4. After Puja — the analysis
 
 Export the data: D1 console → `SELECT * FROM reports;` and `SELECT * FROM events;` → download CSV.
 Ideas: crowd level by pandal × hour heatmap, average minutes saved by the optimiser, most-matched preferences. Next year, train a crowd forecast on this data.
+
+## Photos
+
+All photos are freely licensed images from Wikimedia Commons, resized into `public/img/`. Their credits are generated into `public/js/photos.js` and listed on the site's Method page, as CC BY / BY-SA requires.
+
+- `scripts/fetch_photos.ps1` (Windows PowerShell) downloads, resizes and credits them. To add a photo for a pandal, add a line `'p-<pandal id>' = @('<Commons file title>', 900)` and rerun it.
+- Pandals without their own photo show a photo of the same kind of puja, labelled "প্রতীকী ছবি / Representative photo".
+- Don't copy photos from other puja sites. They are usually copyrighted.
 
 ## Settings
 
