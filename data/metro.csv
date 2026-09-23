@@ -1,0 +1,45 @@
+id,city,line,name_bn,name_en,lat,lng,seq
+dum-dum,kolkata,blue,দমদম,Dum Dum,22.6215,88.3930,1
+belgachia,kolkata,blue,বেলগাছিয়া,Belgachia,22.6060,88.3810,2
+shyambazar,kolkata,blue,শ্যামবাজার,Shyambazar,22.6010,88.3740,3
+sovabazar,kolkata,blue,শোভাবাজার সুতানুটি,Sovabazar Sutanuti,22.5960,88.3700,4
+girish-park,kolkata,blue,গিরিশ পার্ক,Girish Park,22.5860,88.3620,5
+mg-road,kolkata,blue,মহাত্মা গান্ধী রোড,MG Road,22.5780,88.3590,6
+central,kolkata,blue,সেন্ট্রাল,Central,22.5700,88.3560,7
+chandni-chowk,kolkata,blue,চাঁদনি চক,Chandni Chowk,22.5640,88.3530,8
+esplanade,kolkata,blue,এসপ্ল্যানেড,Esplanade,22.5620,88.3510,9
+park-street,kolkata,blue,পার্ক স্ট্রিট,Park Street,22.5520,88.3520,10
+maidan,kolkata,blue,ময়দান,Maidan,22.5430,88.3470,11
+rabindra-sadan,kolkata,blue,রবীন্দ্র সদন,Rabindra Sadan,22.5390,88.3460,12
+netaji-bhavan,kolkata,blue,নেতাজি ভবন,Netaji Bhavan,22.5300,88.3450,13
+jatin-das-park,kolkata,blue,যতীন দাস পার্ক,Jatin Das Park,22.5230,88.3460,14
+kalighat,kolkata,blue,কালীঘাট,Kalighat,22.5170,88.3460,15
+rabindra-sarobar,kolkata,blue,রবীন্দ্র সরোবর,Rabindra Sarobar,22.5090,88.3470,16
+mahanayak-uttam-kumar,kolkata,blue,মহানায়ক উত্তমকুমার,Mahanayak Uttam Kumar,22.4990,88.3460,17
+netaji,kolkata,blue,নেতাজি,Netaji,22.4910,88.3470,18
+masterda-surya-sen,kolkata,blue,মাস্টারদা সূর্য সেন,Masterda Surya Sen,22.4795,88.3625,19
+gitanjali,kolkata,blue,গীতাঞ্জলি,Gitanjali,22.4740,88.3700,20
+kavi-nazrul,kolkata,blue,কবি নজরুল,Kavi Nazrul,22.4700,88.3800,21
+sealdah,kolkata,green,শিয়ালদহ,Sealdah,22.5670,88.3700,1
+phoolbagan,kolkata,green,ফুলবাগান,Phoolbagan,22.5720,88.3890,2
+salt-lake-stadium,kolkata,green,সল্টলেক স্টেডিয়াম,Salt Lake Stadium,22.5720,88.3990,3
+bengal-chemical,kolkata,green,বেঙ্গল কেমিক্যাল,Bengal Chemical,22.5800,88.4020,4
+city-centre,kolkata,green,সিটি সেন্টার,City Centre,22.5880,88.4060,5
+central-park,kolkata,green,সেন্ট্রাল পার্ক,Central Park,22.5890,88.4110,6
+karunamoyee,kolkata,green,করুণাময়ী,Karunamoyee,22.5860,88.4180,7
+taratala,kolkata,purple,তারাতলা,Taratala,22.4960,88.3210,1
+behala-bazar,kolkata,purple,বেহালা বাজার,Behala Bazar,22.4880,88.3170,2
+behala-chowrasta,kolkata,purple,বেহালা চৌরাস্তা,Behala Chowrasta,22.4800,88.3130,3
+trinity,bengaluru,purple,ট্রিনিটি,Trinity,12.9730,77.6170,1
+halasuru,bengaluru,purple,হালাসুরু,Halasuru,12.9760,77.6260,2
+indiranagar,bengaluru,purple,ইন্দিরানগর,Indiranagar,12.9780,77.6390,3
+sv-road,bengaluru,purple,স্বামী বিবেকানন্দ রোড,Swami Vivekananda Road,12.9860,77.6450,4
+baiyappanahalli,bengaluru,purple,বাইয়াপ্পানাহল্লি,Baiyappanahalli,12.9910,77.6520,5
+kr-puram,bengaluru,purple,কে আর পুরম,KR Puram,13.0000,77.6780,6
+kundalahalli,bengaluru,purple,কুন্দলাহল্লি,Kundalahalli,12.9770,77.7160,7
+jayanagar,bengaluru,green,জয়নগর,Jayanagar,12.9300,77.5800,1
+rv-road,bengaluru,green,আরভি রোড,RV Road,12.9210,77.5800,2
+banashankari,bengaluru,green,বনশঙ্করী,Banashankari,12.9150,77.5730,3
+jp-nagar,bengaluru,green,জেপি নগর,JP Nagar,12.9070,77.5730,4
+yelachenahalli,bengaluru,green,ইয়েলাচেনাহল্লি,Yelachenahalli,12.8960,77.5700,5
+konanakunte-cross,bengaluru,green,কোনানাকুন্তে ক্রস,Konanakunte Cross,12.8850,77.5530,6

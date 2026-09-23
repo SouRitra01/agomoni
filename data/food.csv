@@ -1,0 +1,12 @@
+id,city,name_bn,name_en,area_bn,area_en,lat,lng,kind_bn,kind_en,try_bn,try_en,verified
+mitra-cafe,kolkata,মিত্র কাফে,Mitra Cafe,শোভাবাজার,Sovabazar,22.5948,88.3668,কাটলেট ও ফ্রাই,Cutlets & fries,কবিরাজি কাটলেট,Kobiraji cutlet,no
+golbari,kolkata,গোলবাড়ি,Golbari,শ্যামবাজার,Shyambazar,22.6003,88.3745,কষা মাংস,Kosha mangsho,কষা মাংস ও পরোটা,Kosha mangsho with paratha,no
+coffee-house,kolkata,ইন্ডিয়ান কফি হাউস,Indian Coffee House,কলেজ স্ট্রিট,College Street,22.5752,88.3632,কেবিন ও আড্ডা,Cabin & adda,ইনফিউশন ও কাটলেট,Infusion coffee & cutlet,no
+paramount,kolkata,প্যারামাউন্ট,Paramount,কলেজ স্কোয়ার,College Square,22.5741,88.3645,শরবত,Sherbet,ডাব শরবত,Daab sherbet,no
+anadi-cabin,kolkata,অনাদি কেবিন,Anadi Cabin,ধর্মতলা,Esplanade,22.5635,88.3515,মোগলাই,Mughlai,মোগলাই পরোটা,Mughlai paratha,no
+nizams,kolkata,নিজাম'স,Nizam's,নিউ মার্কেট,New Market,22.5605,88.3530,রোল,Rolls,কাঠি রোল,Kathi roll,no
+arsalan-park-circus,kolkata,আরসালান,Arsalan,পার্ক সার্কাস,Park Circus,22.5395,88.3650,বিরিয়ানি,Biryani,মাটন বিরিয়ানি,Mutton biryani,no
+balaram-mullick,kolkata,বলরাম মল্লিক,Balaram Mullick,ভবানীপুর,Bhowanipore,22.5305,88.3470,মিষ্টি,Sweets,বেকড রসগোল্লা,Baked rosogolla,no
+bijoli-grill,kolkata,বিজলি গ্রিল,Bijoli Grill,ভবানীপুর,Bhowanipore,22.5300,88.3490,ফিশ ফ্রাই,Fish fry,ভেটকি ফিশ ফ্রাই,Bhetki fish fry,no
+vivekananda-park-phuchka,kolkata,বিবেকানন্দ পার্কের ফুচকা,Vivekananda Park phuchka,সাদার্ন অ্যাভিনিউ,Southern Avenue,22.5140,88.3560,ফুচকা,Phuchka,গন্ধরাজ লেবু ফুচকা,Gondhoraj phuchka,no
+maharaj-sarat-bose,kolkata,মহারাজ,Maharaj,দেশপ্রিয় পার্ক,Deshapriya Park,22.5165,88.3525,কচুরি,Kochuri,হিং কচুরি ও আলুর দম,Hing kochuri & aloor dom,no

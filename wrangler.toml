@@ -1,0 +1,8 @@
+name = "agomoni"
+pages_build_output_dir = "public"
+compatibility_date = "2026-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "agomoni-db"
+database_id = "PASTE-YOUR-DATABASE-ID-HERE"
