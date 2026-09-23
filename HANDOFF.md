@@ -16,6 +16,7 @@ GitHub account for everything: SouRitra01 (do not ask again). Footer credits @So
 - Preview (private): https://claude.ai/artifact/D2zehpDSzjMAWhKU3mCF29 — built with `python3 scripts/build_preview.py`.
 
 ## Open tasks (in order)
+Data science / AI roadmap with phases and priorities: `docs/ROADMAP.md` (instrumentation must ship before launch).
 1. ~~Push to GitHub~~ DONE 2026-09-24: https://github.com/SouRitra01/agomoni (public, branch main).
 2. Deploy on Cloudflare Pages (README section 1): output dir `public`, D1 `agomoni-db` bound as `DB`, secret `HASH_SALT`.
 3. Verify every pandal lat/lng on Google Maps (all rows are `verified = no`) — most important before promoting.

@@ -198,6 +198,90 @@ window.PHOTOS = [
         "source":  "https://commons.wikimedia.org/wiki/File:Durga_Puja_Bangalore_(85263351).jpeg"
     },
     {
+        "key":  "food-hero",
+        "src":  "img/food-hero.jpg",
+        "author":  "TAPAS KUMAR HALDER",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Bengali_style_chicken_biryani,_Kolkata_-_West_Bengal_-_DSC_0020.jpg"
+    },
+    {
+        "key":  "f-mitra-cafe",
+        "src":  "img/f-mitra-cafe.jpg",
+        "author":  "Biswarup Ganguly",
+        "license":  "CC BY 3.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Chicken_Kabiraji_Cutlet_-_Kolkata_2013-12-15_5383.JPG"
+    },
+    {
+        "key":  "f-golbari",
+        "src":  "img/f-golbari.jpg",
+        "author":  "Afifa Afrin",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Mutton_curry_in_a_table.jpg"
+    },
+    {
+        "key":  "fp-coffee-house",
+        "src":  "img/fp-coffee-house.jpg",
+        "author":  "Pinakpani",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Inside_view_of_the_Indian_Coffee_House,_Kolkata_03.jpg"
+    },
+    {
+        "key":  "f-paramount",
+        "src":  "img/f-paramount.jpg",
+        "author":  "Sumit Surai",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Daab_Sharbat_-_Tender_Coconut_Drink.JPG"
+    },
+    {
+        "key":  "f-anadi-cabin",
+        "src":  "img/f-anadi-cabin.jpg",
+        "author":  "Sumit Surai",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Moglai_Porota.jpg"
+    },
+    {
+        "key":  "f-nizams",
+        "src":  "img/f-nizams.jpg",
+        "author":  "Adam Jones from Kelowna, BC, Canada",
+        "license":  "CC BY-SA 2.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Making_Kati_Rolls_-_Millennium_Park_-_Central_Kolkata_-_India_(12268604906).jpg"
+    },
+    {
+        "key":  "f-arsalan-park-circus",
+        "src":  "img/f-arsalan-park-circus.jpg",
+        "author":  "DeepanjanGhosh",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Kolkata_mutton_biryani.jpg"
+    },
+    {
+        "key":  "f-balaram-mullick",
+        "src":  "img/f-balaram-mullick.jpg",
+        "author":  "AshLin",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Baked_Rasgulla.JPG"
+    },
+    {
+        "key":  "f-bijoli-grill",
+        "src":  "img/f-bijoli-grill.jpg",
+        "author":  "Biswarup Ganguly",
+        "license":  "CC BY 3.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Fish_Fry_-_Kolkata_2014-02-13_2642.JPG"
+    },
+    {
+        "key":  "f-vivekananda-park-phuchka",
+        "src":  "img/f-vivekananda-park-phuchka.jpg",
+        "author":  "Ramakrishna Reddy y",
+        "license":  "CC BY-SA 2.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Indian_cuisine-Panipuri-03.jpg"
+    },
+    {
+        "key":  "f-maharaj-sarat-bose",
+        "src":  "img/f-maharaj-sarat-bose.jpg",
+        "author":  "Dr. Tania Dey",
+        "license":  "CC BY-SA 4.0",
+        "source":  "https://commons.wikimedia.org/wiki/File:Koraishutir_Kochuri_by_Tania_Dey.jpg"
+    },
+    {
         "key":  "m-kumartuli",
         "src":  "img/m-kumartuli.jpg",
         "author":  "Pinakpani",
